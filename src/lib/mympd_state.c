@@ -86,6 +86,9 @@ void mympd_state_default(struct t_mympd_state *mympd_state, struct t_config *con
     //mpd partition state
     mympd_state->partition_state = malloc_assert(sizeof(struct t_partition_state));
     partition_state_default(mympd_state->partition_state, MPD_PARTITION_DEFAULT, mympd_state);
+    //snapcast state
+    mympd_state->snapcast_state = malloc_assert(sizeof(struct t_snapcast_state));
+    snapcast_state_default(mympd_state->snapcast_state, mympd_state);
     //triggers;
     list_init(&mympd_state->trigger_list);
     //home icons
@@ -114,6 +117,8 @@ void mympd_state_free(struct t_mympd_state *mympd_state) {
         partition_state_free(partition_state);
         partition_state = next;
     }
+    //snapcast shared state
+    snapcast_state_free(mympd_state->snapcast_state);
     //sds
     FREE_SDS(mympd_state->tag_list_search);
     FREE_SDS(mympd_state->tag_list_browse);
@@ -333,4 +338,20 @@ void copy_tag_types(struct t_tags *src_tag_list, struct t_tags *dst_tag_list) {
 void reset_t_tags(struct t_tags *tags) {
     tags->len = 0;
     memset(tags->tags, 0, sizeof(tags->tags));
+}
+
+/**
+ * Sets Snapcast state defaults
+ * @param t_snapcast_state pointer to t_snapcast_state struct
+ * @param mympd_state pointer to central myMPD state
+ */
+void snapcast_state_default(struct t_snapcast_state *snapcast_state, struct t_mympd_state *mympd_state) {
+    snapcast_state->mympd_state = mympd_state;
+    snapcast_state->snapcast_host = sdsnew(MYMPD_SNAPCAST_HOST);
+    snapcast_state->snapcast_port = MYMPD_SNAPCAST_PORT;
+}
+
+void snapcast_state_free(struct t_snapcast_state *snapcast_state) {
+    FREE_SDS(snapcast_state->snapcast_host);
+    FREE_PTR(snapcast_state);
 }

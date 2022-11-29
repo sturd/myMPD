@@ -94,6 +94,10 @@ extern struct t_mympd_queue *mympd_script_queue;
 #define MYMPD_MPD_PASS ""
 #define MYMPD_MPD_BINARYLIMIT 8192 //bytes
 
+//default snapcast state settings
+#define MYMPD_SNAPCAST_HOST "localhost"
+#define MYMPD_SNAPCAST_PORT 1780
+
 //default mympd state settings
 #define MYMPD_MUSIC_DIRECTORY "auto"
 #define MYMPD_PLAYLIST_DIRECTORY "auto"
@@ -220,9 +224,13 @@ extern struct t_mympd_queue *mympd_script_queue;
 #define MPD_OUTPUT_ID_MAX 40
 #define COLS_MAX 20
 
+//port limits
+#define PORT_MIN 1024
+#define PORT_MAX 65535
+
 //mpd limits
-#define MPD_PORT_MIN 1024
-#define MPD_PORT_MAX 65535
+#define MPD_PORT_MIN PORT_MIN
+#define MPD_PORT_MAX PORT_MAX
 #define MPD_TIMEOUT_MIN 10000 //ms
 #define MPD_TIMEOUT_MAX 1000000 //ms
 #define MPD_RESULTS_MIN 1
@@ -234,6 +242,10 @@ extern struct t_mympd_queue *mympd_script_queue;
 #define MPD_QUEUE_PRIO_MAX 255
 #define MPD_CROSSFADE_MAX 100
 #define MPD_CONNECTION_MAX 100
+
+//
+#define SNAPCAST_PORT_MIN PORT_MIN
+#define SNAPCAST_PORT_MAX PORT_MAX
 
 //limits for json parsing
 #define JSONRPC_INT_MIN INT_MIN

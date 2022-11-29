@@ -303,6 +303,21 @@ bool mympd_api_settings_set(sds key, sds value, int vtype, validate_callback vcb
         }
         mympd_state->volume_step = volume_step;
     }
+    else if(strcmp(key, "snapcastHost") == 0 && vtype == MJSON_TOK_STRING) {
+        if (vcb_isfilepath(value) == false) {
+            *error = set_invalid_value(*error, key, value);
+            return false;
+        }
+        mympd_state->snapcast_state->snapcast_host = sds_replace(mympd_state->snapcast_state->snapcast_host, value);
+    }
+    else if(strcmp(key, "snapcastPort") == 0 && vtype == MJSON_TOK_NUMBER) {
+        unsigned port = (unsigned)strtoimax(value, NULL, 10);
+        if(port < SNAPCAST_PORT_MIN || port > SNAPCAST_PORT_MAX) {
+            *error = set_invalid_value(*error, key, value);
+            return false;
+        }
+        mympd_state->snapcast_state->snapcast_port = port;
+    }
     else if (strcmp(key, "tagList") == 0 && vtype == MJSON_TOK_STRING) {
         if (vcb_istaglist(value) == false) {
             *error = set_invalid_value(*error, key, value);
@@ -692,6 +707,8 @@ void mympd_api_settings_statefiles_global_read(struct t_mympd_state *mympd_state
     mympd_state->volume_min = state_file_rw_uint(workdir, "state", "volume_min", mympd_state->volume_min, VOLUME_MIN, VOLUME_MAX, false);
     mympd_state->volume_max = state_file_rw_uint(workdir, "state", "volume_max", mympd_state->volume_max, VOLUME_MIN, VOLUME_MAX, false);
     mympd_state->volume_step = state_file_rw_uint(workdir, "state", "volume_step", mympd_state->volume_step, VOLUME_STEP_MIN, VOLUME_STEP_MAX, false);
+    mympd_state->snapcast_state->snapcast_host = state_file_rw_string_sds(workdir, "state", "snapcast_host", mympd_state->snapcast_state->snapcast_host, vcb_isfilepath, false);
+    mympd_state->snapcast_state->snapcast_port = state_file_rw_uint(workdir, "state", "snapcast_port", mympd_state->snapcast_state->snapcast_port, SNAPCAST_PORT_MIN, SNAPCAST_PORT_MAX, false);
     mympd_state->webui_settings = state_file_rw_string_sds(workdir, "state", "webui_settings", mympd_state->webui_settings, validate_json_object, false);
     mympd_state->lyrics.uslt_ext = state_file_rw_string_sds(workdir, "state", "lyrics_uslt_ext", mympd_state->lyrics.uslt_ext, vcb_isalnum, false);
     mympd_state->lyrics.sylt_ext = state_file_rw_string_sds(workdir, "state", "lyrics_sylt_ext", mympd_state->lyrics.sylt_ext, vcb_isalnum, false);
@@ -768,6 +785,8 @@ sds mympd_api_settings_get(struct t_partition_state *partition_state, sds buffer
     buffer = tojson_uint(buffer, "volumeMin", mympd_state->volume_min, true);
     buffer = tojson_uint(buffer, "volumeMax", mympd_state->volume_max, true);
     buffer = tojson_uint(buffer, "volumeStep", mympd_state->volume_step, true);
+    buffer = tojson_sds(buffer, "snapcastHost", mympd_state->snapcast_state->snapcast_host, true);
+    buffer = tojson_uint(buffer, "snapcastPort", mympd_state->snapcast_state->snapcast_port, true);
     buffer = tojson_sds(buffer, "lyricsUsltExt", mympd_state->lyrics.uslt_ext, true);
     buffer = tojson_sds(buffer, "lyricsSyltExt", mympd_state->lyrics.sylt_ext, true);
     buffer = tojson_sds(buffer, "lyricsVorbisUslt", mympd_state->lyrics.vorbis_uslt, true);

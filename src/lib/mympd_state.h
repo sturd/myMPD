@@ -212,6 +212,7 @@ struct t_lyrics {
 struct t_mympd_state {
     struct t_config *config;                      //!< pointer to static config
     struct t_mpd_state *mpd_state;                //!< mpd state shared across partitions
+    struct t_snapcast_state *snapcast_state;      //!< snapcast state shared across partitions
     struct t_partition_state *partition_state;    //!< list of partition states
     struct pollfd fds[MPD_CONNECTION_MAX];        //!< mpd connection fds
     nfds_t nfds;                                     //!< number of mpd connection fds
@@ -250,6 +251,15 @@ struct t_mympd_state {
 };
 
 /**
+ * Holds SnapCast state.
+ */
+struct t_snapcast_state {
+    struct t_mympd_state *mympd_state;
+    sds snapcast_host;
+    unsigned snapcast_port;
+};
+
+/**
  * Public functions
  */
 void mympd_state_save(struct t_mympd_state *mympd_state);
@@ -266,5 +276,8 @@ void partition_state_free(struct t_partition_state *partition_state);
 
 void copy_tag_types(struct t_tags *src_tag_list, struct t_tags *dst_tag_list);
 void reset_t_tags(struct t_tags *tags);
+
+void snapcast_state_default(struct t_snapcast_state *snapcast_state, struct t_mympd_state *mympd_state);
+void snapcast_state_free(struct t_snapcast_state *snapcast_state);
 
 #endif
