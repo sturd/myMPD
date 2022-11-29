@@ -802,7 +802,7 @@ function saveSettings(closeModal) {
 
     for (const inputId of ['inputWebUIsettinguiThumbnailSize', 'inputSettinglastPlayedCount',
         'inputSmartplsInterval', 'inputSettingvolumeMax', 'inputSettingvolumeMin',
-        'inputSettingvolumeStep'])
+        'inputSettingvolumeStep', 'inputSettingsnapcastPort'])
     {
         const inputEl = document.getElementById(inputId);
         if (validateUintEl(inputEl) === false) {
@@ -894,6 +894,8 @@ function saveSettings(closeModal) {
             "volumeMin": Number(document.getElementById('inputSettingvolumeMin').value),
             "volumeMax": Number(document.getElementById('inputSettingvolumeMax').value),
             "volumeStep": Number(document.getElementById('inputSettingvolumeStep').value),
+            "snapcastHost": document.getElementById('inputSettingsnapcastHost').value,
+            "snapcastPort": Number(document.getElementById('inputSettingsnapcastPort').value),
             "lyricsUsltExt": document.getElementById('inputSettinglyricsUsltExt').value,
             "lyricsSyltExt": document.getElementById('inputSettinglyricsSyltExt').value,
             "lyricsVorbisUslt": document.getElementById('inputSettinglyricsVorbisUslt').value,

@@ -435,6 +435,20 @@ const settingFields = {
         "form": "volumeSettingsFrm",
         "reset": true
     },
+    "snapcastHost": {
+        "defaultValue": "localhost",
+        "inputType": "input",
+        "title": "SnapCast host",
+        "form": "snapcastSettingsFrm",
+        "reset": true
+    },
+    "snapcastPort": {
+        "defaultValue": 1705,
+        "inputType": "input",
+        "title": "SnapCast host",
+        "form": "snapcastSettingsFrm",
+        "reset": true
+    },
     "lyricsUsltExt": {
         "defaultValue": "txt",
         "inputType": "input",
