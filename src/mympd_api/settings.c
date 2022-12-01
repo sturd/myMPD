@@ -477,6 +477,13 @@ bool mympd_api_settings_partition_set(sds key, sds value, int vtype, validate_ca
         }
         partition_state->stream_uri = sds_replace(partition_state->stream_uri, value);
     }
+    else if (strcmp(key, "snapcastStream") == 0 && vtype == MJSON_TOK_STRING) {
+        if (sdslen(value) > 0 && vcb_isname(value)) {
+            *error = set_invalid_value(*error, key, value);
+            return false;
+        }
+        partition_state->snapcast_stream = sds_replace(partition_state->snapcast_stream, value);
+    }
     else {
         sdsclear(*error);
         *error = sdscatfmt(*error, "Unknown setting \"%S\": \"%S\"", key, value);
@@ -738,6 +745,7 @@ void mympd_api_settings_statefiles_partition_read(struct t_partition_state *part
     partition_state->highlight_color = state_file_rw_string_sds(workdir, partition_state->state_dir, "highlight_color", partition_state->highlight_color, vcb_ishexcolor, false);
     partition_state->mpd_stream_port = state_file_rw_uint(workdir, "state", "mpd_stream_port", partition_state->mpd_stream_port, MPD_PORT_MIN, MPD_PORT_MAX, false);
     partition_state->stream_uri = state_file_rw_string_sds(workdir, partition_state->state_dir, "stream_uri", partition_state->stream_uri, vcb_isuri, false);
+    partition_state->snapcast_stream = state_file_rw_string_sds(workdir, partition_state->state_dir, "snapcast_stream", partition_state->snapcast_stream, vcb_isname, false);
 }
 
 /**
@@ -816,6 +824,7 @@ sds mympd_api_settings_get(struct t_partition_state *partition_state, sds buffer
     buffer = tojson_char(buffer, "highlightColor", partition_state->highlight_color, true);
     buffer = tojson_uint(buffer, "mpdStreamPort", partition_state->mpd_stream_port, true);
     buffer = tojson_char(buffer, "streamUri", partition_state->stream_uri, true);
+    buffer = tojson_char(buffer, "snapcastStream", partition_state->snapcast_stream, true);
     if (partition_state->conn_state == MPD_CONNECTED) {
         //mpd options
         buffer = tojson_bool(buffer, "mpdConnected", true, true);

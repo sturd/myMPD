@@ -247,6 +247,7 @@ void partition_state_default(struct t_partition_state *partition_state, const ch
     partition_state->conn = NULL;
     partition_state->conn_state = MPD_DISCONNECTED;
     partition_state->play_state = MPD_STATE_UNKNOWN;
+    partition_state->snapcast_stream = sdsempty();
     partition_state->reconnect_time = 0;
     partition_state->reconnect_interval = 0;
     partition_state->song_id = -1;
@@ -310,6 +311,7 @@ void partition_state_free(struct t_partition_state *partition_state) {
     FREE_SDS(partition_state->state_dir);
     FREE_SDS(partition_state->song_uri);
     FREE_SDS(partition_state->last_song_uri);
+    FREE_SDS(partition_state->snapcast_stream);
     //jukebox
     jukebox_clear(&partition_state->jukebox_queue);
     jukebox_clear(&partition_state->jukebox_queue_tmp);

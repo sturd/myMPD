@@ -119,6 +119,8 @@ struct t_partition_state {
     //reconnect timer
     time_t reconnect_time;                 //!< timestamp at which next connection attempt is made
     time_t reconnect_interval;             //!< interval for connections attempts (increases by failed attempts)
+    //snapcast stream
+    sds snapcast_stream;                   //!< snapcast stream name
     //track player states
     enum mpd_state play_state;             //!< mpd player state
     int song_id;                           //!< current song id from queue
