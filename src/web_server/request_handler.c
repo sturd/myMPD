@@ -15,6 +15,7 @@
 #include "src/web_server/proxy.h"
 #include "src/web_server/radiobrowser.h"
 #include "src/web_server/sessions.h"
+#include "src/web_server/snapcast.h"
 #include "src/web_server/utility.h"
 #include "src/web_server/webradiodb.h"
 
@@ -325,6 +326,19 @@ void request_handler_serverinfo(struct mg_connection *nc) {
         webserver_send_data(nc, response, sdslen(response), "Content-Type: application/json\r\n");
         FREE_SDS(response);
     }
+}
+
+/**
+ * Request handler for /snapcast
+ * @param nc mongoose connection
+ * @param body http body
+ * @param backend_nc mongoose backend connection
+ */
+void request_handler_snapcast(struct mg_connection *nc, sds body, struct mg_connection *backend_nc)
+{
+    sds uri = sdscatfmt(sdsempty(), "http://%s%s", "192.168.1.101:1780", "/jsonrpc");
+    backend_nc = create_snapcast_connection(nc, backend_nc, uri, body, forward_snapcast_to_frontend);
+    FREE_SDS(uri);
 }
 
 #ifdef MYMPD_ENABLE_SSL

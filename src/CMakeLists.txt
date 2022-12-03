@@ -116,4 +116,5 @@ target_sources(mympd PRIVATE
   web_server/tagart.c
   web_server/utility.c
   web_server/webradiodb.c
+  web_server/snapcast.c
 )

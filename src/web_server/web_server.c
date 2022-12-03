@@ -5,6 +5,7 @@
 */
 
 #include "compile_time.h"
+#include "dist/sds/sds.h"
 #include "src/web_server/web_server.h"
 
 #include "src/lib/api.h"
@@ -515,6 +516,12 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data, void *fn
                     webserver_send_data(nc, response, sdslen(response), "Content-Type: application/json\r\n");
                     FREE_SDS(response);
                 }
+            }
+            else if (mg_http_match_uri(hm, "/snapcast/*") == true) {
+                //body
+                sds body = sdsnewlen(hm->body.ptr, hm->body.len);
+                request_handler_snapcast(nc, body, frontend_nc_data->backend_nc);
+                FREE_SDS(body);
             }
             else if (mg_http_match_uri(hm, "/albumart-thumb") == true) {
                 request_handler_albumart(nc, hm, mg_user_data, (long long)nc->id, ALBUMART_THUMBNAIL);
