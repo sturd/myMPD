@@ -478,7 +478,7 @@ bool mympd_api_settings_partition_set(sds key, sds value, int vtype, validate_ca
         partition_state->stream_uri = sds_replace(partition_state->stream_uri, value);
     }
     else if (strcmp(key, "snapcastStream") == 0 && vtype == MJSON_TOK_STRING) {
-        if (sdslen(value) > 0 && vcb_isname(value)) {
+        if (sdslen(value) > 0 && vcb_isname(value) == false) {
             *error = set_invalid_value(*error, key, value);
             return false;
         }
