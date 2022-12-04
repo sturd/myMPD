@@ -435,6 +435,13 @@ const settingFields = {
         "form": "volumeSettingsFrm",
         "reset": true
     },
+    "snapcastEnabled": {
+        "defaultValue": false,
+        "inputType": "checkbox",
+        "title": "Enable",
+        "form": "snapcastSettingsFrm",
+        "reset": true
+    },
     "snapcastHost": {
         "defaultValue": "localhost",
         "inputType": "input",
@@ -448,6 +455,13 @@ const settingFields = {
         "title": "SnapCast host",
         "form": "snapcastSettingsFrm",
         "reset": true
+    },
+    "snapcastStream": {
+        "defaultValue": "Default",
+        "inputType": "select",
+        "title": "SnapCast Stream",
+        "form": "snapcastSettingsFrm",
+        "reset": false
     },
     "lyricsUsltExt": {
         "defaultValue": "txt",

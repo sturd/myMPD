@@ -349,7 +349,8 @@ function populateSettingsFrm() {
     document.getElementById('inputHighlightColor').value = settings.partition.highlightColor;
     document.getElementById('inputMpdStreamPort').value = settings.partition.mpdStreamPort;
     document.getElementById('inputStreamUri').value = settings.partition.streamUri;
-
+    document.getElementById('inputSettingsnapcastStream').value = settings.partition.snapcastStream;
+    
     //locales
     const localeList = document.getElementById('inputWebUIsettinguiLocale');
     elClear(localeList);
@@ -948,6 +949,7 @@ function savePartitionSettings(closeModal) {
     let formOK = true;
     const mpdStreamPortEl = document.getElementById('inputMpdStreamPort');
     const streamUriEl = document.getElementById('inputStreamUri');
+    const snapcastStreamEl = document.getElementById('inputSettingsnapcastStream');
     if (validateIntRangeEl(mpdStreamPortEl, 0, 65535) === false) {
         formOK = false;
     }
@@ -961,7 +963,8 @@ function savePartitionSettings(closeModal) {
         const params = {
             "highlightColor": document.getElementById('inputHighlightColor').value,
             "mpdStreamPort": Number(mpdStreamPortEl.value),
-            "streamUri": streamUriEl.value
+            "streamUri": streamUriEl.value,
+            "snapcastStream": snapcastStreamEl.value
         };
         if (closeModal === true) {
             sendAPI('MYMPD_API_PARTITION_SAVE', params, savePartitionSettingsClose, true);
