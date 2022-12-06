@@ -61,8 +61,12 @@ function sendSnapCastpartition(partition, method, params, callback, onerror) {
         enterPin(method, params, callback, onerror);
         return false;
     }
+
+    const snapcastHostEl = document.getElementById('inputSettingsnapcastHost');
+    const snapcastPortEl = document.getElementById('inputSettingsnapcastPort');
+
     //we do not use the jsonrpc id field because we get the response directly.
-    const request = {"jsonrpc": "2.0", "id": 0, "method": method};
+    const request = {"jsonrpc": "2.0", "id": 0, "method": method, "host": snapcastHostEl.value, "port": snapcastPortEl.value};
     if(params != null && params != "")
         request.params = params;
 

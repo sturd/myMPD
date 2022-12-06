@@ -16,7 +16,7 @@ struct t_snapcast_nc_data {
     enum mympd_cmd_ids cmd_id;          //!< jsonrpc method of the frontend connection
 };
 
-struct mg_connection *create_snapcast_connection(struct mg_connection *nc, struct mg_connection *backend_nc,
+void create_snapcast_connection(struct mg_connection *nc, struct mg_connection *backend_nc,
         sds uri, sds body, mg_event_handler_t fn);
 void send_snapcast_request(struct mg_connection *nc, void *fn_data);
 void handle_snapcast_close(struct mg_connection *nc, struct t_snapcast_nc_data *backend_nc_data);

@@ -12,6 +12,7 @@
 #include "src/lib/log.h"
 #include "src/lib/msg_queue.h"
 #include "src/lib/sds_extras.h"
+#include "src/lib/validate.h"
 #include "src/web_server/proxy.h"
 #include "src/web_server/radiobrowser.h"
 #include "src/web_server/sessions.h"
@@ -336,8 +337,13 @@ void request_handler_serverinfo(struct mg_connection *nc) {
  */
 void request_handler_snapcast(struct mg_connection *nc, sds body, struct mg_connection *backend_nc)
 {
-    sds uri = sdscatfmt(sdsempty(), "http://%s%s", "192.168.1.101:1780", "/jsonrpc");
-    backend_nc = create_snapcast_connection(nc, backend_nc, uri, body, forward_snapcast_to_frontend);
+    sds snapcast_host = NULL;
+    sds snapcast_port = NULL;
+    json_get_string_max(body, "$.host", &snapcast_host, vcb_istext, NULL);
+    json_get_string_max(body, "$.port", &snapcast_port, vcb_isdigit, NULL);
+
+    sds uri = sdscatfmt(sdsempty(), "http://%s:%s/%s", snapcast_host, snapcast_port, "jsonrpc");
+    create_snapcast_connection(nc, backend_nc, uri, body, forward_snapcast_to_frontend);
     FREE_SDS(uri);
 }
 

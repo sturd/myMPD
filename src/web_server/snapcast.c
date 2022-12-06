@@ -80,7 +80,7 @@ void send_snapcast_request(struct mg_connection *nc, void *fn_data) {
  * @param uri uri of the SnapCast HTTP RPC endpoint
  * @param body connection event handler
  */
-struct mg_connection *create_snapcast_connection(struct mg_connection *nc, struct mg_connection *backend_nc, sds uri, sds body, mg_event_handler_t fn) {
+void create_snapcast_connection(struct mg_connection *nc, struct mg_connection *backend_nc, sds uri, sds body, mg_event_handler_t fn) {
     if (backend_nc == NULL) {
         MYMPD_LOG_INFO("Creating new http SnapCast connection to \"%s\"", uri);
         struct t_snapcast_nc_data *snapcast_nc_data = malloc(sizeof(struct t_snapcast_nc_data));
@@ -103,14 +103,6 @@ struct mg_connection *create_snapcast_connection(struct mg_connection *nc, struc
             frontend_nc_data->backend_nc = backend_nc;
         }
     }
-    if (backend_nc != NULL) {
-        //set labels
-        backend_nc->label[0] = 'B';
-        backend_nc->label[1] = nc->label[1];
-        backend_nc->label[2] = nc->label[2];
-        MYMPD_LOG_INFO("Forwarding client connection \"%lu\" to SnapCast connection \"%lu\"", nc->id, backend_nc->id);
-    }
-    return backend_nc;
 }
 
 /**
