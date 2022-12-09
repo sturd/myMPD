@@ -518,9 +518,11 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data, void *fn
                 }
             }
             else if (mg_http_match_uri(hm, "/snapcast/*") == true) {
-                //body
+                struct mg_str *snapcast_host = mg_http_get_header(hm, "X-SnapCast-Host");
+                struct mg_str *snapcast_port = mg_http_get_header(hm, "X-SnapCast-Port");
+
                 sds body = sdsnewlen(hm->body.ptr, hm->body.len);
-                request_handler_snapcast(nc, body, frontend_nc_data->backend_nc);
+                request_handler_snapcast(nc, body, snapcast_host, snapcast_port, frontend_nc_data->backend_nc);
                 FREE_SDS(body);
             }
             else if (mg_http_match_uri(hm, "/albumart-thumb") == true) {

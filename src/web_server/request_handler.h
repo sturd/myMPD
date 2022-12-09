@@ -20,7 +20,8 @@ void request_handler_proxy(struct mg_connection *nc, struct mg_http_message *hm,
 void request_handler_proxy_covercache(struct mg_connection *nc, struct mg_http_message *hm,
         struct mg_connection *backend_nc);
 void request_handler_serverinfo(struct mg_connection *nc);
-void request_handler_snapcast(struct mg_connection *nc, sds body, struct mg_connection *backend_nc);
+void request_handler_snapcast(struct mg_connection *nc, sds body, struct mg_str *snapcast_host,
+        struct mg_str *snapcast_port, struct mg_connection *backend_nc);
 
 #ifdef MYMPD_ENABLE_SSL
 void request_handler_ca(struct mg_connection *nc, struct mg_http_message *hm,

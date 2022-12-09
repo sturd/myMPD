@@ -66,13 +66,15 @@ function sendSnapCastpartition(partition, method, params, callback, onerror) {
     const snapcastPortEl = document.getElementById('inputSettingsnapcastPort');
 
     //we do not use the jsonrpc id field because we get the response directly.
-    const request = {"jsonrpc": "2.0", "id": 0, "method": method, "host": snapcastHostEl.value, "port": snapcastPortEl.value};
+    const request = {"jsonrpc": "2.0", "id": 0, "method": method};
     if(params != null && params != "")
         request.params = params;
 
     const ajaxRequest = new XMLHttpRequest();
     ajaxRequest.open('POST', subdir + '/snapcast/' + partition, true);
     ajaxRequest.setRequestHeader('Content-type', 'application/json');
+    ajaxRequest.setRequestHeader('X-SnapCast-Host', snapcastHostEl.value);
+    ajaxRequest.setRequestHeader('X-SnapCast-Port', snapcastPortEl.value);
     if (session.token !== '') {
         ajaxRequest.setRequestHeader('X-myMPD-Session', session.token);
     }

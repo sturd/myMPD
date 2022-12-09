@@ -335,14 +335,12 @@ void request_handler_serverinfo(struct mg_connection *nc) {
  * @param body http body
  * @param backend_nc mongoose backend connection
  */
-void request_handler_snapcast(struct mg_connection *nc, sds body, struct mg_connection *backend_nc)
+void request_handler_snapcast(struct mg_connection *nc, sds body, struct mg_str *snapcast_host,
+        struct mg_str *snapcast_port, struct mg_connection *backend_nc)
 {
-    sds snapcast_host = NULL;
-    sds snapcast_port = NULL;
-    json_get_string_max(body, "$.host", &snapcast_host, vcb_istext, NULL);
-    json_get_string_max(body, "$.port", &snapcast_port, vcb_isdigit, NULL);
-
-    sds uri = sdscatfmt(sdsempty(), "http://%s:%s/%s", snapcast_host, snapcast_port, "jsonrpc");
+    sds host = sdscatlen(sdsempty(), snapcast_host->ptr, snapcast_host->len);
+    sds port = sdscatlen(sdsempty(), snapcast_port->ptr, snapcast_port->len);
+    sds uri = sdscatfmt(sdsempty(), "http://%s:%s/%s", host, port, "jsonrpc");
     create_snapcast_connection(nc, backend_nc, uri, body, forward_snapcast_to_frontend);
     FREE_SDS(uri);
 }
